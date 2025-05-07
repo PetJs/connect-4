@@ -34,6 +34,7 @@ The game follows a component-based arcitecture with:
 - Uses CSS animations to show ...
 
 ## CODE STRUCTURE
+```bash
 CONNECT-4/
     |---- index.html  # Main game HTML
     |---- assets/
@@ -46,6 +47,7 @@ CONNECT-4/
         |---- utils/
         |---- main.js # Main Game Functions
     |---- README.md  # Documentation
+```
 
 ## DEVEOPMENT NOTES
 
