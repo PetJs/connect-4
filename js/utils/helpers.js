@@ -37,10 +37,34 @@ function createBoard() {
         for(let j = 0; j< cols; j++){
             const disc = document.createElement('div');
             disc.className = 'col'
+            disc.dataset.row = i;
+            disc.dataset.col = j;
+            disc.addEventListener('click', (e) =>{
+                fillHoles(e);
+            } );
+            
             disc.innerHTML = newBoard[i][j];
             boardContainer.appendChild(disc)
         }
     }
 }
 
+function fillHoles(e){
+    // const row = e.target.dataset.row;
+    const col = e.target.dataset.col;
+        
+    for(let r = rows-1; r >= 0; r--){
+        const targetDisc = document.querySelector(`[data-row="${r}"][data-col="${col}"]`)
+        const color = window.getComputedStyle(targetDisc).backgroundColor;
+        if (color === "rgb(255, 255, 255)") {
+            targetDisc.style.backgroundColor = "red";
+            break;
+        }
+    }
+    
+}
+
 export default createBoard;
+
+
+
