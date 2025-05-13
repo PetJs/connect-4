@@ -23,6 +23,7 @@
 const rows = 6;
 const cols = 7;
 const board = [];
+let currentColor = "red";
 
 const boardContainer = document.getElementById("board");
 
@@ -41,12 +42,17 @@ function createBoard() {
             disc.dataset.col = j;
             disc.addEventListener('click', (e) =>{
                 fillHoles(e);
+                switchPlayer()
             } );
             
             disc.innerHTML = newBoard[i][j];
             boardContainer.appendChild(disc)
         }
     }
+        
+    
+    // initial turn alert
+    alert(`Player ${currentColor === 'red' ? 'One' : 'Two'} turn`);
 }
 
 function fillHoles(e){
@@ -55,13 +61,19 @@ function fillHoles(e){
         
     for(let r = rows-1; r >= 0; r--){
         const targetDisc = document.querySelector(`[data-row="${r}"][data-col="${col}"]`)
-        const color = window.getComputedStyle(targetDisc).backgroundColor;
-        if (color === "rgb(255, 255, 255)") {
-            targetDisc.style.backgroundColor = "red";
+        const bgcolor = window.getComputedStyle(targetDisc).backgroundColor;
+        if (bgcolor === "rgb(255, 255, 255)" || bgcolor === "rgb(128, 128, 128)") {
+            targetDisc.style.backgroundColor = currentColor;
             break;
         }
     }
     
+}
+
+
+function switchPlayer(){
+    currentColor = currentColor === 'red' ? 'yellow' : 'red';
+    alert(`Player ${currentColor === 'red' ? 'One' : 'Two'} turn`);
 }
 
 export default createBoard;
