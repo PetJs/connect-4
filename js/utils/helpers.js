@@ -35,7 +35,14 @@ function createBoard() {
             disc.dataset.col = j;
             disc.addEventListener('click', (e) => {
                 const { row, col } = fillHoles(e);
-                switchPlayer();
+                if (row >= 0) {
+                    if (calcWin(row, col)) {
+                        displayWinAlert(currentColor)
+                      // you’ve got a winner! show a message and stop further moves
+                    } else {
+                      switchPlayer();
+                    }
+                }
                 console.log(board[row][col]);
             });
 
@@ -45,7 +52,8 @@ function createBoard() {
     }
 
     // initial turn alert
-    alert(`Player ${currentColor === 'red' ? 'One' : 'Two'} turn`);
+    displayTurnAlert()
+    // alert(`Player ${currentColor === 'red' ? 'One' : 'Two'} turn`);
 }
 
 /**
@@ -78,9 +86,97 @@ function fillHoles(e) {
     return { row: -1, col };
 }
 
+/**
+ * Switch Player(i.e color) and displays an alert modal,
+ */
 function switchPlayer() {
     currentColor = currentColor === 'red' ? 'yellow' : 'red';
-    alert(`Player ${currentColor === 'red' ? 'One' : 'Two'} turn`);
+    setTimeout(()=>{
+        displayTurnAlert();
+    }, 1000)
 }
+
+/**
+ * Displays an alert modal,
+ */
+
+const turnAlert = document.getElementById('turn-alert')
+
+function displayTurnAlert(){
+    turnAlert.textContent = `Player ${currentColor === 'red' ? 'One' : 'Two'} turn`;
+    turnAlert.classList.remove('alert-player-turn');
+    void turnAlert.offsetWidth;           // trigger reflow
+    turnAlert.classList.add('alert-player-turn');
+}
+
+function displayWinAlert(color) {
+    alert(`Player ${color === 'red' ? 'One' : 'Two'} wins!`);
+}
+
+/**
+ * Checks if placing at (row, col) creates a connect four
+ * @param {number} row
+ * @param {number} col
+ * @returns {boolean}
+ */
+
+function calcWin(row, col){
+    const color = board[row][col]
+
+    // Define the four directions to check: horizontal, vertical, two diagonals
+    const directions = [
+        { dr: 0, dc: 1 },   // horizontal
+        { dr: 1, dc: 0 },   // vertical
+        { dr: 1, dc: 1 },   // diagonal \ 
+        { dr: 1, dc: -1 }   // diagonal /
+    ];
+    // When a hole is fill, check left
+    // 1. if same color, add unto a variable +1, note the variable is initialized to one
+    // 2. Check the next color beside it, if same color, variable ++, 
+    // 3. If var == 4, The color wins, or set winner variable to that color
+    // 4. But if you check the left and it is not the same color, check the right, then repeat step 1 - 3
+    // 5. If left or right id=s not the same color, check top, repeat step 1-3
+
+    for (const { dr, dc } of directions) {
+        let winCount = 1;
+        // in the forward direction (dr, dc)
+        winCount += countInDirection(row, col, dr, dc, color);
+        // Count in the backward/opposite direction (-dr, -dc)
+        winCount += countInDirection(row, col, -dr, -dc, color);
+        if (winCount >= 4) return true;
+    }
+    // No One Wins
+    return false;
+
+}
+
+/**
+ * Count consecutive discs of same color starting from (r, c) in given direction
+ * @param {number} r - starting row index
+ * @param {number} c - starting column index
+ * @param {number} dr - row direction increment (+1, 0, or -1)
+ * @param {number} dc - column direction increment (+1, 0, or -1)
+ * @param {string} color
+ * @returns {number}
+ */
+function countInDirection(r, c, dr, dc, color) {
+    let count = 0;
+    // Move one step from the starting cell
+    let row = r + dr;
+    let col = c + dc;
+
+    // Keep going while we're inside the board and colors match
+    while (
+        row >= 0 && row < rows &&
+        col >= 0 && col < cols &&
+        board[row][col] === color
+    ) {
+        count++; // found a matching disc
+        row += dr; // move further in row direction
+        col += dc; // move further in column direction
+    }
+    return count;
+}
+
 
 export default createBoard;
