@@ -19,6 +19,18 @@ const board = [];
 let currentColor = "red";
 
 const boardContainer = document.getElementById("board");
+const scoreOne = document.getElementById("scoreone")
+const scoreTwo = document.getElementById("scoretwo")
+
+// for moile
+const scoreOneMobile = document.getElementById("sm:scoreone")
+const scoreTwoMobile = document.getElementById("sm:scoretwo")
+
+// Score variable
+
+let playerOneScore = parseInt(scoreOne.textContent);
+let playerTwoScore = parseInt(scoreTwo.textContent);
+
 
 function createBoard() {
     // create the 2D array 
@@ -38,6 +50,7 @@ function createBoard() {
                 if (row >= 0) {
                     if (calcWin(row, col)) {
                         displayWinAlert(currentColor)
+                        trackScore(currentColor)
                       // you’ve got a winner! show a message and stop further moves
                     } else {
                       switchPlayer();
@@ -176,6 +189,20 @@ function countInDirection(r, c, dr, dc, color) {
         col += dc; // move further in column direction
     }
     return count;
+}
+
+function trackScore(color){
+    if(color === 'red'){
+        playerOneScore += 1;
+        scoreOne.textContent = playerOneScore;
+        scoreOneMobile.textContent = playerOneScore;
+        console.log("Player 1: ", playerOneScore)
+    }else{
+        playerTwoScore += 1;
+        scoreTwo.textContent = playerTwoScore;
+        scoreTwoMobile.textContent = playerTwoScore;
+        console.log("player Two: ", playerTwoScore)
+    }
 }
 
 
