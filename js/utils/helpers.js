@@ -51,7 +51,9 @@ function createBoard() {
                     if (calcWin(row, col)) {
                         displayWinAlert(currentColor)
                         trackScore(currentColor)
+                        addConfetti();
                       // you’ve got a winner! show a message and stop further moves
+
                     } else {
                       switchPlayer();
                     }
@@ -203,6 +205,17 @@ function trackScore(color){
         scoreTwoMobile.textContent = playerTwoScore;
         console.log("player Two: ", playerTwoScore)
     }
+}
+
+function addConfetti(){
+    confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: {
+            x: 0.5,
+            y: 0.5,
+        }
+    });
 }
 
 
