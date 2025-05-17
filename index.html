@@ -26,7 +26,41 @@
 <body>
     <p class="alert-player-turn" id="turn-alert">Player One Turn!</p>
     <main>
+        <div class="display-player">
+            <div>Red</div>
+            <div class="score-ui">
+                <p>Player One</p>
+                <p class="score" id="scoreone" >0</p>
+            </div>
+        </div>
+
+        <div class="sm-ui">
+            <div class="sm-display-player">
+                <p class="sm-layer-icon-red"></p>
+                <div class="sm-score-ui">
+                    <p class="one">Player One</p>
+                    <p class="sm-score" id="sm:scoreone">0</p>
+                </div>
+            </div>
+
+            <div class="sm-display-player">
+                <p class="sm-layer-icon-yellow"></p>
+                <div class="sm-score-ui">
+                    <p>Player Two</p>
+                    <p class="sm-score two" id="sm:scoretwo">0</p>
+                </div>
+            </div>
+        </div>
+        
         <div id="board" class="row"></div>
+
+
+        <div class="display-player">
+            <div>Yellow</div>
+            <div class="score-ui">
+                <p>Player Two</p>
+                <p class="score" id="scoretwo">0</p>
+        </div>
     </main>
    
 

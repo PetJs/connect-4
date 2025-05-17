@@ -16,7 +16,6 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0;
 }
 
 .row {
@@ -27,6 +26,7 @@ main {
     background-color: #0044cc;
     padding: 10px;
     border-radius: 10px;
+    margin: 24px;
 }
 
 .col {
@@ -57,3 +57,113 @@ main {
 .hidden{
     display: none;
 }
+
+.display-player{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+}
+
+.sm-display-player{
+    display: flex;
+    position: relative;
+    align-items: center;
+}
+
+.score-ui{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    background: red;
+    align-items: center;
+    text-align: center;
+    border-radius: 12px;
+    padding: 8px;
+}
+
+.sm-ui{
+    display: none;
+}
+
+
+.score{
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* On tablets and smaller (up to 768px), stack scores above the board */
+@media (max-width: 620px) {
+    main {
+        flex-direction: column;    
+        margin: 32px;    
+    }
+
+    .row{
+        width: 90vw;
+        gap: 2px;
+    }
+
+    .col{
+        width: 45px;
+        height: 45px;
+    }
+
+    .display-player{
+        display: none;
+    }
+
+    .sm-ui{
+        display: flex;
+        justify-content: center;
+        gap: 24px;
+        align-items: center;
+    }
+    .sm-score-ui{
+        display: flex;
+        background-color: gray;
+        border-radius: 8px;
+        padding-left: 8px;
+        padding-right: 6px;
+        width: 35vw;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .sm-layer-icon-red{
+        position: absolute;
+        top: 10;
+        transform: translate(-50%, 0);
+        background: red;
+        border-radius: 50%;
+        width: 52px;
+        height: 52px;
+    }
+
+    .sm-layer-icon-yellow{
+        position: absolute;
+        top: 10;
+        right: 0;
+        transform: translate(50%, 0);
+        background: yellow;
+        border-radius: 50%;
+        width: 52px;
+        height: 52px;
+    }
+
+    .one{
+        margin-left: 30px;
+    }
+
+    .two{
+        margin-right: 30px;
+    }
+    
+    .sm-score{
+        font-size: 24px;
+        font-weight: bold;
+    }
+    
+}
+  
