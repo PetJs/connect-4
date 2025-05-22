@@ -13,6 +13,9 @@
  *
  */
 
+import { clickSound } from "./audio.js";
+import { winSound } from "./audio.js";
+
 const rows = 6;
 const cols = 7;
 const board = [];
@@ -46,14 +49,15 @@ function createBoard() {
             disc.dataset.row = i;
             disc.dataset.col = j;
             disc.addEventListener('click', (e) => {
+                clickSound();
                 const { row, col } = fillHoles(e);
                 if (row >= 0) {
                     if (calcWin(row, col)) {
                         displayWinAlert(currentColor)
-                        trackScore(currentColor)
+                        trackScore(currentColor);
+                        winSound();
                         addConfetti();
                       // you’ve got a winner! show a message and stop further moves
-
                     } else {
                       switchPlayer();
                     }

@@ -1,5 +1,5 @@
 import createBoard from './utils/helpers.js';
-import { enterSound } from './utils/audio.js';
+import { enterSound, clickSound } from './utils/audio.js';
 
 
 const landing     = document.getElementById('landing');
@@ -30,13 +30,21 @@ audio.addEventListener('click', ()=> {
         bgMusic.muted = false;
         audio.src = '/assets/images/audio-svgrepo-com.svg';
     }
+
+    if (bgMusic.paused) {
+        bgMusic.play();
+    } else {
+        bgMusic.pause();
+    }
 })
 
 
 modeSelect.addEventListener('click', e => {
     const mode = e.target.dataset.mode;           // "pvp" or "pvcpu"
     if (!mode) return;                            // ignore clicks outside buttons
-  
+    
+    clickSound();
+
     modeSelect.hidden = true;
     gameSection.hidden = false;
   
