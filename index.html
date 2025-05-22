@@ -25,15 +25,18 @@
 </head>
 <body>
     <!-- Landing Page -->
-    <section id="landing">
-        <h1>Welcome to Connect4</h1>
-        <button id="start-btn">Click to Enter</button>
+    <section id="landing" class="landing-page-ui">
+        <div class="logo-container">
+            <img src="/assets/images/Connect4_logo.png" alt="logo" class="logo-img">
+            <p class="landing-tagline">Drop your discs and make a line of four before your opponent!</p>
+        </div>
+        <button id="start-btn" class="start-btn">Click to Enter!</button>
     </section>
 
     <!-- Mode Section -->
-    <section id="select-mode" hidden>
-        <button data-mode="pvp">Player vs Player</button>
-        <button data-mode="pvcpu">Player vs CPU</button>
+    <section id="select-mode" class="mode" hidden>
+        <button data-mode="pvp" class="mode-btn">👥 Player vs Player</button>
+        <button data-mode="pvcpu" class="mode-btn">🤖 Player vs CPU</button>
     </section>
 
     <!-- Game -->
@@ -41,7 +44,9 @@
         <p class="alert-player-turn" id="turn-alert">Player One Turn!</p>
         <main>
             <div class="display-player">
-                <div>Red</div>
+                <div class="player-icon">
+                    <img src="assets/images/emoji-smile-svgrepo-com.svg" alt="smiley face" width="44px" height="44px">
+                </div>
                 <div class="score-ui">
                     <p>Player One</p>
                     <p class="score" id="scoreone" >0</p>
@@ -70,7 +75,9 @@
     
     
             <div class="display-player">
-                <div>Yellow</div>
+                <div class="player-icon-two">
+                    <img src="assets/images/emoji-smile-svgrepo-com.svg" alt="smiley face" width="44px" height="44px">
+                </div>
                 <div class="score-ui">
                     <p>Player Two</p>
                     <p class="score" id="scoretwo">0</p>

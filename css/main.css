@@ -12,6 +12,89 @@
  * - design-system.css: Core design system logic
 */
 
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+[hidden]{
+    display: none !important;
+}
+
+
+@font-face {
+    font-family: 'LogoFont';
+    src: url('/assets/fonts/Tagesschrift-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+.landing-page-ui{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #0044cc;
+    min-height: 100vh;
+}
+
+.logo-container{
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.logo-img{
+    width: 50vw;
+    max-width: 500px;   
+    height: auto;
+}
+
+.landing-tagline {
+  margin: 1rem 0;
+  font-size: 1.25rem;
+  color: #eef;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.start-btn {
+  display: inline-block;     
+  background: none;
+  color: white;
+  border: none;
+  animation: fade-in 2s ease forwards infinite;
+  border-radius: 8px;
+  font-size: 1.5rem;
+  font-family: 'LogoFont', sans-serif;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.mode{
+    gap: 1rem; 
+    margin-top: 2rem;
+}
+
+.mode-btn {
+  background: rgba(255,255,255,0.8);
+  border: none; 
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px; 
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.mode-btn:hover {
+    background: #fff; 
+    transform: translateY(-3px); 
+}
+
+
 main {
     display: flex;
     justify-content: center;
@@ -27,6 +110,7 @@ main {
     padding: 10px;
     border-radius: 10px;
     margin: 24px;
+    box-shadow:  0 2px 8px rgba(0, 0, 0, 0.6);
 }
 
 .col {
@@ -38,6 +122,7 @@ main {
     align-items: center;
     justify-content: center;
     font-size: 20px;
+    box-shadow:  0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
 .col:hover{
@@ -76,11 +161,39 @@ main {
     display: flex;
     justify-content: center;
     flex-direction: column;
-    background: red;
+    box-shadow:  0 2px 8px rgba(0, 0, 0, 0.8) ;
     align-items: center;
     text-align: center;
     border-radius: 12px;
     padding: 8px;
+}
+
+.player-icon{
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    background-color: #cc0000;
+    top: 0;
+    transform: translate(0, -50%);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.player-icon-two{
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    background-color: yellow;
+    top: 0;
+    transform: translate(0, -50%);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
 }
 
 .sm-ui{
@@ -91,6 +204,11 @@ main {
 .score{
     font-size: 24px;
     font-weight: bold;
+}
+
+@keyframes fade-in {
+    from { opacity: 0;}
+    to { opacity: 1;}
 }
 
 /* On tablets and smaller (up to 768px), stack scores above the board */
