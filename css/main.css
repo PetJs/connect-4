@@ -19,6 +19,14 @@
     box-sizing: border-box;
 }
 
+
+body{
+    background-image: url('/assets/images/bg.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 100vh;
+}
+
 [hidden]{
     display: none !important;
 }
@@ -34,8 +42,9 @@
 
 .audio{
     width: 32px;
-    position: absolute;
+    position: fixed;
     right: 0;
+    top: 0;
     cursor: pointer;
     margin-right: 12px;
 }
@@ -45,7 +54,6 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background-color: #0044cc;
     min-height: 100vh;
 }
 
@@ -66,14 +74,14 @@
   margin: 1rem 0;
   font-size: 1.25rem;
   text-align: center;
-  color: #eef;
+  color: rgb(172, 172, 235);
   text-shadow: 0 1px 2px rgba(0,0,0,0.3);
 }
 
 .start-btn {
   display: inline-block;     
   background: none;
-  color: white;
+  color: rgb(34, 19, 245);
   border: none;
   animation: fade-in 2s ease forwards infinite;
   border-radius: 8px;
@@ -83,15 +91,28 @@
   transition: background 0.3s;
 }
 
+.mode-container{
+    min-height: 100vh; 
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; 
+}
+
 .mode{
-    gap: 1rem; 
-    margin-top: 2rem;
+    display: grid;
+    gap: 1rem;
+    background-color: white;
+    padding: 1em;
+    width: 50vw;
+    border-radius: 12px;
 }
 
 .mode-btn {
-  background: rgba(255,255,255,0.8);
+  background: rgba(96, 80, 238, 0.8);
   border: none; 
-  padding: 0.75rem 1.5rem;
+  padding: 0.5rem ;
   border-radius: 8px; 
   font-size: 1rem;
   cursor: pointer;
@@ -103,6 +124,15 @@
     transform: translateY(-3px); 
 }
 
+.heading{
+    display: flex;
+    justify-content: center;
+}
+
+.heading img{
+    width: 25vw;
+    max-width: 130px;
+}
 
 main {
     display: flex;
@@ -175,6 +205,7 @@ main {
     text-align: center;
     border-radius: 12px;
     padding: 8px;
+    height: 150px;
 }
 
 .player-icon{
@@ -213,6 +244,7 @@ main {
 .score{
     font-size: 24px;
     font-weight: bold;
+    margin-top: 16px;
 }
 
 @keyframes fade-in {
@@ -223,18 +255,20 @@ main {
 /* On tablets and smaller (up to 768px), stack scores above the board */
 @media (max-width: 620px) {
     main {
-        flex-direction: column;    
-        margin: 32px;    
+        flex-direction: column;        
     }
 
     .row{
-        width: 90vw;
-        gap: 2px;
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);         
+        gap: 8px;
+        width: 95vw;           /* keep the 90% of viewport width */
+        max-width: 400px;      /* optional cap so it never blows up */
+        margin: 24px auto;  
     }
 
     .col{
-        width: 45px;
-        height: 45px;
+        width: 100%;        
     }
 
     .display-player{
@@ -266,6 +300,9 @@ main {
         border-radius: 50%;
         width: 52px;
         height: 52px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .sm-layer-icon-yellow{
@@ -277,6 +314,9 @@ main {
         border-radius: 50%;
         width: 52px;
         height: 52px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .one{

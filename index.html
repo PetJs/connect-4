@@ -37,14 +37,20 @@
     </section>
 
     <!-- Mode Section -->
-    <section id="select-mode" class="mode" hidden>
-        <button data-mode="pvp" class="mode-btn">👥 Player vs Player</button>
-        <button data-mode="pvcpu" class="mode-btn">🤖 Player vs CPU</button>
+    <section id="select-mode" class="mode-container" hidden>
+        <h1>Choose Mode Sucker</h1>
+        <div class="mode">
+            <button data-mode="pvp" class="mode-btn">👥 Player vs Player</button>
+            <button data-mode="pvcpu" class="mode-btn">🤖 Player vs CPU</button>
+            <button  class="mode-btn">📝 How to Play</button>
+        </div>
     </section>
 
     <!-- Game -->
     <section id="game" hidden>
-        <p class="alert-player-turn" id="turn-alert">Player One Turn!</p>
+        <div class="heading">
+            <img src="/assets/images/Connect4_logo.png" alt="logo" >
+        </div>
         <main>
             <div class="display-player">
                 <div class="player-icon">
@@ -58,7 +64,9 @@
     
             <div class="sm-ui">
                 <div class="sm-display-player">
-                    <p class="sm-layer-icon-red"></p>
+                    <p class="sm-layer-icon-red">
+                        <img src="assets/images/emoji-smile-svgrepo-com.svg" alt="smiley face" width="44px" height="44px">
+                    </p>
                     <div class="sm-score-ui">
                         <p class="one">Player One</p>
                         <p class="sm-score" id="sm:scoreone">0</p>
@@ -66,7 +74,9 @@
                 </div>
     
                 <div class="sm-display-player">
-                    <p class="sm-layer-icon-yellow"></p>
+                    <p class="sm-layer-icon-yellow">
+                        <img src="assets/images/emoji-smile-svgrepo-com.svg" alt="smiley face" width="44px" height="44px">
+                    </p>
                     <div class="sm-score-ui">
                         <p>Player Two</p>
                         <p class="sm-score two" id="sm:scoretwo">0</p>
@@ -86,6 +96,8 @@
                     <p class="score" id="scoretwo">0</p>
             </div>
         </main>
+
+        <p class="alert-player-turn" id="turn-alert">Player One Turn!</p>
     </section>
    
 
