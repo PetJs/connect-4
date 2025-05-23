@@ -9,6 +9,9 @@ const bgMusic = document.getElementById("bg-music");
 const startBtn = document.getElementById("start-btn")
 const audio = document.getElementById("audio")
 
+const playerTwo = document.getElementById("player-two")
+const smplayerTwo = document.getElementById("sm-player-two")
+
 window.onload = function (){
     if(bgMusic){
         bgMusic.loop = true;
@@ -41,6 +44,11 @@ modeSelect.addEventListener('click', e => {
     if (!mode) return;                            // ignore clicks outside buttons
     
     clickSound();
+
+    if(mode === "pvcpu"){
+        playerTwo.innerHTML = "CPU";
+        smplayerTwo.innerHTML = "CPU"
+    }
 
     modeSelect.hidden = true;
     gameSection.hidden = false;
