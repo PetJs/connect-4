@@ -15,6 +15,7 @@
 
 import { clickSound } from "./audio.js";
 import { winSound } from "./audio.js";
+import { landing, gameSection, modeSelect } from "../main.js";
 
 const rows = 6;
 const cols = 7;
@@ -57,13 +58,14 @@ function createBoard(mode) {
                 if (row >= 0) {
                     if (calcWin(row, col)) {
                         // you’ve got a winner! 
-                        displayWinAlert(currentColor)
+                        displayWinModal(currentColor)
                         trackScore(currentColor);
                         winSound();
                         addConfetti();
                     } else {
                       switchPlayer();
-                      if(mode == "pvcpu" || currentColor == "yellow"){
+                    //   console.log(mode)
+                      if(mode == "pvcpu" && currentColor == "yellow"){
                         setTimeout(()=>{
                             cpu();
                         }, 500)
@@ -145,8 +147,51 @@ function displayTurnAlert(){
     turnAlert.classList.add('alert-player-turn');
 }
 
-function displayWinAlert(color) {
-    alert(`Player ${color === 'red' ? 'One' : 'Two'} wins!`);
+function displayWinModal(color){
+    console.log("You win")
+
+    const existingModal = document.querySelector(".modal");
+    if (existingModal) {
+        existingModal.remove();
+    }
+
+    const modal = document.createElement("div");
+    modal.className = "modal"
+    modal.innerHTML = 
+    `
+        <h2>Player ${color === 'red' ? 'One' : 'Two'} Wins! </h2>
+        <div class= "modal-btn-container">
+            <button class= "btn-quit" id="btn-quit">Quit!</button>
+            <button class= "btn-try-again" id="btn-try-again">Play Again</button>
+        </div>
+    `
+
+    document.body.appendChild(modal);
+
+    const btnQuit = document.getElementById("btn-quit");
+    const btnTryAgain = document.getElementById("btn-try-again");
+
+    btnQuit.addEventListener("click", ()=> {
+        resetGame()
+        modal.remove()
+    })
+
+    btnTryAgain.addEventListener('click', ()=>{
+        createBoard();
+        modal.remove()
+    })
+    
+}
+
+function resetGame(){
+    gameSection.hidden = true;
+    landing.hidden = false;
+    playerOneScore = 0;
+    playerTwoScore = 0;
+    scoreOne.textContent = playerOneScore;
+    scoreOneMobile.textContent = playerOneScore;
+    scoreTwo.textContent = playerTwoScore;
+    scoreTwoMobile.textContent = playerTwoScore;
 }
 
 /**

@@ -2,19 +2,22 @@ import createBoard from './utils/helpers.js';
 import { enterSound, clickSound } from './utils/audio.js';
 
 
-const landing     = document.getElementById('landing');
-const modeSelect  = document.getElementById('select-mode');
-const gameSection = document.getElementById('game');
+export const landing     = document.getElementById('landing');
+export const modeSelect  = document.getElementById('select-mode');
+export const gameSection = document.getElementById('game');
 const bgMusic = document.getElementById("bg-music");
 const startBtn = document.getElementById("start-btn")
 const audio = document.getElementById("audio")
 
-if(bgMusic){
-    bgMusic.loop = true;
-    bgMusic.currentTime = 0;
-    bgMusic.play().catch(err => console.warn('Audio play prevented:', err));
-    bgMusic.volume = 0.4;
+window.onload = function (){
+    if(bgMusic){
+        bgMusic.loop = true;
+        bgMusic.currentTime = 0;
+        bgMusic.play().catch(err => console.warn('Audio play prevented:', err));
+        bgMusic.volume = 0.4;
+    }
 }
+
 
 startBtn.addEventListener('click', () => {
     enterSound();
