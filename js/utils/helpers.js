@@ -35,8 +35,12 @@ const scoreTwoMobile = document.getElementById("sm-scoretwo")
 let playerOneScore = parseInt(scoreOne.textContent);
 let playerTwoScore = parseInt(scoreTwo.textContent);
 
+// Game over variable
+let gameOver = false;
+
 
 function createBoard(mode) {
+    gameOver = false
     board.length = 0; // Clear existing board
     boardContainer.innerHTML = "";
 
@@ -53,10 +57,14 @@ function createBoard(mode) {
             disc.dataset.row = i;
             disc.dataset.col = j;
             disc.addEventListener('click', (e) => {
+                if(gameOver){
+                    return // Stop clicks
+                }
                 clickSound();
                 const { row, col } = fillHoles(e);
                 if (row >= 0) {
                     if (calcWin(row, col)) {
+                        gameOver = true
                         // you’ve got a winner! 
                         displayWinModal(currentColor)
                         trackScore(currentColor);
@@ -172,7 +180,7 @@ function displayWinModal(color){
     const btnTryAgain = document.getElementById("btn-try-again");
 
     btnQuit.addEventListener("click", ()=> {
-        resetGame()
+        quitGame()
         modal.remove()
     })
 
@@ -183,7 +191,7 @@ function displayWinModal(color){
     
 }
 
-function resetGame(){
+function quitGame(){
     gameSection.hidden = true;
     landing.hidden = false;
     playerOneScore = 0;
