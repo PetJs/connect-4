@@ -26,8 +26,8 @@ const scoreOne = document.getElementById("scoreone")
 const scoreTwo = document.getElementById("scoretwo")
 
 // for moile
-const scoreOneMobile = document.getElementById("sm:scoreone")
-const scoreTwoMobile = document.getElementById("sm:scoretwo")
+const scoreOneMobile = document.getElementById("sm-scoreone")
+const scoreTwoMobile = document.getElementById("sm-scoretwo")
 
 // Score variable
 
@@ -35,7 +35,10 @@ let playerOneScore = parseInt(scoreOne.textContent);
 let playerTwoScore = parseInt(scoreTwo.textContent);
 
 
-function createBoard() {
+function createBoard(mode) {
+    board.length = 0; // Clear existing board
+    boardContainer.innerHTML = "";
+
     // create the 2D array 
     const newBoard = Array.from(Array(rows), () => Array(cols).fill(null));
     board.push(...newBoard);
@@ -53,13 +56,18 @@ function createBoard() {
                 const { row, col } = fillHoles(e);
                 if (row >= 0) {
                     if (calcWin(row, col)) {
+                        // you’ve got a winner! 
                         displayWinAlert(currentColor)
                         trackScore(currentColor);
                         winSound();
                         addConfetti();
-                      // you’ve got a winner! show a message and stop further moves
                     } else {
                       switchPlayer();
+                      if(mode == "pvcpu" || currentColor == "yellow"){
+                        setTimeout(()=>{
+                            cpu();
+                        }, 500)
+                      }
                     }
                 }
                 console.log(board[row][col]);
@@ -82,7 +90,16 @@ function createBoard() {
  * @returns {{row: number, col: number}}
  */
 function fillHoles(e) {
-    const col = parseInt(e.target.dataset.col, 10);
+    // let col;
+    // if (typeof eOrCol === "number") {
+    // col = eOrCol;
+    // } else {
+    // col = parseInt(eOrCol.target.dataset.col, 10);
+    // }
+
+    const col = typeof e === "number"
+        ? e
+        : parseInt(e.target.dataset.col, 10);
 
     for (let r = rows - 1; r >= 0; r--) {
         const targetDisc = document.querySelector(
@@ -195,6 +212,27 @@ function countInDirection(r, c, dr, dc, color) {
         col += dc; // move further in column direction
     }
     return count;
+}
+
+
+function cpu(){
+    // Find available column to place the disc
+    const validCols = [];
+    for (let c = 0; c < cols; c++) {
+        if (board[0][c] === null) validCols.push(c);
+    }
+
+    // Pick a random index of any available column
+    const randomIndex = Math.floor(Math.random() * validCols.length);
+    const availCol   = validCols[randomIndex];
+    // Fill the column
+    const {row, col} = fillHoles(availCol)
+    if(row >= 0 && calcWin(row, col)){
+        alert("You lost");
+        trackScore(currentColor);
+    }else{
+        switchPlayer();
+    }
 }
 
 function trackScore(color){

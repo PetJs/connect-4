@@ -22,21 +22,15 @@ startBtn.addEventListener('click', () => {
     modeSelect.hidden  = false;
 });
 
-audio.addEventListener('click', ()=> {
-    if (!bgMusic.muted) {
-        bgMusic.muted = true;
+audio.addEventListener('click', () => {
+    bgMusic.muted = !bgMusic.muted;
+
+    if (bgMusic.muted) {
         audio.src = '/assets/images/audio-off-svgrepo-com.svg';
     } else {
-        bgMusic.muted = false;
         audio.src = '/assets/images/audio-svgrepo-com.svg';
     }
-
-    if (bgMusic.paused) {
-        bgMusic.play();
-    } else {
-        bgMusic.pause();
-    }
-})
+});
 
 
 modeSelect.addEventListener('click', e => {
@@ -49,12 +43,12 @@ modeSelect.addEventListener('click', e => {
     gameSection.hidden = false;
   
     // Pass the chosen mode into your game setup:
-    startGame()
-    // startGame({ mode });
+    // startGame()
+    startGame( mode );
 });
 
   
 
-function startGame(){
-    createBoard();
+function startGame(mode){
+    createBoard(mode);
 }
