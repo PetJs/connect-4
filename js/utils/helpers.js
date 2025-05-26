@@ -10,6 +10,7 @@
  *
  * @dependencies
  * - storage.js
+ * - audio.js
  *
  */
 
@@ -35,6 +36,9 @@ const scoreTwoMobile = document.getElementById("sm-scoretwo")
 let playerOneScore = parseInt(scoreOne.textContent);
 let playerTwoScore = parseInt(scoreTwo.textContent);
 
+// Player mode
+let gameMode = 'pvp'
+
 // Game over variable
 let gameOver = false;
 
@@ -43,6 +47,16 @@ function createBoard(mode) {
     gameOver = false
     board.length = 0; // Clear existing board
     boardContainer.innerHTML = "";
+
+    // Store mode in localStorage if provided
+    if (mode) {
+        localStorage.setItem("gameMode", mode);
+    }
+
+    // Retrieve mode from localStorage if not passed
+    gameMode = mode || localStorage.getItem("gameMode") || "pvp";
+
+    console.log("Game mode:", gameMode);
 
     // create the 2D array 
     const newBoard = Array.from(Array(rows), () => Array(cols).fill(null));
@@ -73,7 +87,8 @@ function createBoard(mode) {
                     } else {
                       switchPlayer();
                     //   console.log(mode)
-                      if(mode == "pvcpu" && currentColor == "yellow"){
+                        console.log(gameMode)
+                      if(gameMode == "pvcpu" && currentColor == "yellow"){
                         setTimeout(()=>{
                             cpu();
                         }, 500)
