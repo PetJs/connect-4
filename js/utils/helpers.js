@@ -17,6 +17,10 @@
 import { clickSound } from "./audio.js";
 import { winSound } from "./audio.js";
 import { landing, gameSection, modeSelect } from "../main.js";
+import { getUserData, saveUserData } from "./storage.js";
+
+const STORAGE_USER = 'Human';
+const STORAGE_CPU  = 'CPU';
 
 const rows = 6;
 const cols = 7;
@@ -44,7 +48,9 @@ let gameOver = false;
 
 
 function createBoard(mode) {
-    gameOver = false
+    gameOver = false;
+    resetSessionScores();
+    currentColor = 'red';
     board.length = 0; // Clear existing board
     boardContainer.innerHTML = "";
 
@@ -58,6 +64,17 @@ function createBoard(mode) {
 
     console.log("Game mode:", gameMode);
 
+    if (gameMode === 'pvcpu') {
+        const humanData = getUserData(STORAGE_USER);
+        const cpuData   = getUserData(STORAGE_CPU);
+
+        playerOneScore = humanData.wins;
+        playerTwoScore = cpuData.wins;
+
+        // update both desktop & mobile UIs
+        updateScoreUI();
+    }
+
     // create the 2D array 
     const newBoard = Array.from(Array(rows), () => Array(cols).fill(null));
     board.push(...newBoard);
@@ -70,33 +87,7 @@ function createBoard(mode) {
             disc.className = 'col';
             disc.dataset.row = i;
             disc.dataset.col = j;
-            disc.addEventListener('click', (e) => {
-                if(gameOver){
-                    return // Stop clicks
-                }
-                clickSound();
-                const { row, col } = fillHoles(e);
-                if (row >= 0) {
-                    if (calcWin(row, col)) {
-                        gameOver = true
-                        // you’ve got a winner! 
-                        displayWinModal(currentColor)
-                        trackScore(currentColor);
-                        winSound();
-                        addConfetti();
-                    } else {
-                      switchPlayer();
-                    //   console.log(mode)
-                        console.log(gameMode)
-                      if(gameMode == "pvcpu" && currentColor == "yellow"){
-                        setTimeout(()=>{
-                            cpu();
-                        }, 500)
-                      }
-                    }
-                }
-                console.log(board[row][col]);
-            });
+            disc.addEventListener('click', handleDiscClick);
 
             disc.innerHTML = newBoard[i][j];
             boardContainer.appendChild(disc);
@@ -106,6 +97,36 @@ function createBoard(mode) {
     // initial turn alert
     displayTurnAlert()
     // alert(`Player ${currentColor === 'red' ? 'One' : 'Two'} turn`);
+}
+
+function handleDiscClick(e){
+    if(gameOver){
+        return // Stop clicks
+    }
+    clickSound();
+    const { row, col } = fillHoles(e);
+    if (row >= 0) {
+        if (calcWin(row, col)) {
+            gameOver = true
+            // you’ve got a winner! 
+            displayWinModal(currentColor)
+            trackScore(currentColor);
+            winSound();
+            addConfetti();
+        } else if(isBoardFull()) {
+            gameOver = true;
+            displayTieModal();
+        } else{
+            console.log(gameMode);
+            switchPlayer()
+            if(gameMode == "pvcpu" && currentColor == "yellow"){
+            setTimeout(()=>{
+                cpu();
+            }, 500)
+            }
+        }
+    }
+    console.log(board[row][col]);
 }
 
 /**
@@ -170,9 +191,7 @@ function displayTurnAlert(){
     turnAlert.classList.add('alert-player-turn');
 }
 
-function displayWinModal(color){
-    console.log("You win")
-
+function showModal(message){
     const existingModal = document.querySelector(".modal");
     if (existingModal) {
         existingModal.remove();
@@ -182,7 +201,7 @@ function displayWinModal(color){
     modal.className = "modal"
     modal.innerHTML = 
     `
-        <h2>Player ${color === 'red' ? 'One' : 'Two'} Wins! </h2>
+        <h2>${message}</h2>
         <div class= "modal-btn-container">
             <button class= "btn-quit" id="btn-quit">Quit!</button>
             <button class= "btn-try-again" id="btn-try-again">Play Again</button>
@@ -203,18 +222,18 @@ function displayWinModal(color){
         createBoard();
         modal.remove()
     })
-    
 }
 
-function quitGame(){
-    gameSection.hidden = true;
-    landing.hidden = false;
-    playerOneScore = 0;
-    playerTwoScore = 0;
-    scoreOne.textContent = playerOneScore;
-    scoreOneMobile.textContent = playerOneScore;
-    scoreTwo.textContent = playerTwoScore;
-    scoreTwoMobile.textContent = playerTwoScore;
+function displayWinModal(color) {
+  showModal(`Player ${color==='red'?'One':'Two'} Wins!`);
+}
+
+function displayTieModal() {
+  showModal("It's a tie!");
+}
+
+function isBoardFull() {
+  return board[0].every(cell => cell !== null);
 }
 
 /**
@@ -296,26 +315,79 @@ function cpu(){
     // Fill the column
     const {row, col} = fillHoles(availCol)
     if(row >= 0 && calcWin(row, col)){
-        alert("You lost");
+        gameOver = true;
+        displayWinModal(currentColor);
         trackScore(currentColor);
+        winSound();
+        addConfetti();
     }else{
         switchPlayer();
     }
 }
 
-function trackScore(color){
-    if(color === 'red'){
-        playerOneScore += 1;
-        scoreOne.textContent = playerOneScore;
-        scoreOneMobile.textContent = playerOneScore;
-        console.log("Player 1: ", playerOneScore)
-    }else{
-        playerTwoScore += 1;
-        scoreTwo.textContent = playerTwoScore;
-        scoreTwoMobile.textContent = playerTwoScore;
-        console.log("player Two: ", playerTwoScore)
-    }
+function trackScore(color) {
+  const isHuman = color === 'red';
+
+  if (isHuman) playerOneScore++; else playerTwoScore++;
+  updateScoreUI();
+
+  // persist only in PVCU mode
+  if (gameMode === 'pvcpu') {
+    updateScore(
+      isHuman ? STORAGE_USER : STORAGE_CPU,
+      /* didWin */ true
+    );
+  }
 }
+
+// Update score ui
+function updateScoreUI() {
+  scoreOne.textContent = playerOneScore;
+  scoreOneMobile.textContent = playerOneScore;
+  scoreTwo.textContent = playerTwoScore;
+  scoreTwoMobile.textContent = playerTwoScore;
+}
+
+function resetSessionScores() {
+  playerOneScore = 0;
+  playerTwoScore = 0;
+  updateScoreUI();
+}
+
+function quitGame() {
+  gameSection.hidden = true;
+  landing.hidden = false;
+  resetSessionScores();
+  if (gameMode === 'pvcpu') displayStoredStats();
+}
+
+// Update score to store it in the local storage
+function updateScore(username, didwin){
+    const userData = getUserData(username);
+
+    if(didwin){
+        userData.wins += 1
+    }else {
+        userData.losses += 1
+    }
+
+    // Levelling
+    userData.level = Math.floor(userData.wins / 3) + 1;
+
+    saveUserData(username, userData)
+}
+
+function displayStoredStats() {
+  const human = getUserData(STORAGE_USER);
+  const cpu   = getUserData(STORAGE_CPU);
+  const c = document.getElementById('stored-stats');
+  c.innerHTML = `
+    <h3>All-Time vs CPU</h3>
+    <p>You: ${human.wins} W / ${human.losses} L (Lvl ${human.level})</p>
+    <p>CPU: ${cpu.wins} W / ${cpu.losses} L (Lvl ${cpu.level})</p>
+  `;
+}
+
 
 function addConfetti(){
     confetti({
