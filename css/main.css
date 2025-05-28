@@ -101,6 +101,7 @@ body{
 }
 
 .mode{
+    font-family: 'LogoFont', sans-serif;
     display: grid;
     gap: 1rem;
     background-color: white;
@@ -110,7 +111,9 @@ body{
 }
 
 .mode-btn {
-  background: rgba(96, 80, 238, 0.8);
+  font-family: 'LogoFont', sans-serif;
+  background: blue;
+  color: #fff;
   border: none; 
   padding: 0.5rem ;
   border-radius: 8px; 
@@ -121,6 +124,7 @@ body{
 
 .mode-btn:hover {
     background: #fff; 
+    color: #000;
     transform: translateY(-3px); 
 }
 
