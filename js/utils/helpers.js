@@ -50,6 +50,10 @@ let gameOver = false;
 // Level
 let playerWins = 0;
 
+/**
+ * Initializes and displays the current game level for the human player.
+ */
+
 function initializeGameStats() {
     const humanData = getUserData(STORAGE_USER); // Get human data
     const currentLevel = humanData && humanData.level !== undefined ? humanData.level : 0; // Get level, default to 0
@@ -60,7 +64,10 @@ function initializeGameStats() {
 }
 initializeGameStats()
 
-
+/**
+ * Creates and initializes the game board, resetting game state and scores.
+ * @param {string} [mode] - The game mode ('pvp' or 'pvcpu'). If not provided, it attempts to retrieve from localStorage.
+ */
 function createBoard(mode) {
     gameOver = false;
     resetSessionScores();
@@ -113,6 +120,11 @@ function createBoard(mode) {
     // alert(`Player ${currentColor === 'red' ? 'One' : 'Two'} turn`);
 }
 
+/**
+ * Handles a disc click event, dropping a disc and checking for win/tie conditions.
+ * Triggers CPU move if in 'pvcpu' mode.
+ * @param {MouseEvent} e - The click event object.
+ */
 function handleDiscClick(e){
     if(gameOver){
         return // Stop clicks
@@ -198,6 +210,9 @@ function switchPlayer() {
 
 const turnAlert = document.getElementById('turn-alert')
 
+/**
+ * Displays an animated alert indicating whose turn it is.
+ */
 function displayTurnAlert(){
     turnAlert.textContent = `Player ${currentColor === 'red' ? 'One' : 'Two'} turn`;
     turnAlert.classList.remove('alert-player-turn');
@@ -205,6 +220,11 @@ function displayTurnAlert(){
     turnAlert.classList.add('alert-player-turn');
 }
 
+
+/**
+ * Displays a generic modal with a message and "Quit!" and "Play Again" buttons.
+ * @param {string} message - The message to display in the modal.
+ */
 function showModal(message){
     const existingModal = document.querySelector(".modal");
     if (existingModal) {
@@ -238,14 +258,26 @@ function showModal(message){
     })
 }
 
+
+/**
+ * Displays a win modal for the winning player.
+ * @param {string} color - The color of the winning player ('red' or 'yellow').
+ */
 function displayWinModal(color) {
   showModal(`Player ${color==='red'?'One':'Two'} Wins!`);
 }
 
+
+/**
+ * Displays a modal indicating a tie game.
+ */
 function displayTieModal() {
   showModal("It's a tie!");
 }
 
+/**
+ * Displays a "You Lose" modal with "Quit!" and "Play Again" buttons.
+ */
 function displayLoseModal(){
     const existingModal = document.querySelector(".modal");
     if (existingModal) {
@@ -279,6 +311,11 @@ function displayLoseModal(){
     })
 }
 
+
+/**
+ * Checks if the game board is completely full, indicating a tie.
+ * @returns {boolean} True if the board is full, false otherwise.
+ */
 function isBoardFull() {
   return board[0].every(cell => cell !== null);
 }
@@ -372,12 +409,25 @@ function countInDirection(r, c, dr, dc, color) {
 //     }
 // }
 
+
+/**
+ * Implements the CPU's move logic. It attempts to win, then to block the human player,
+ * and finally plays a random valid move.
+ */
 function cpu() {
   const validCols = [];
   for (let c = 0; c < cols; c++) {
     if (board[0][c] === null) validCols.push(c);
   }
 
+
+  /**
+   * Helper function to simulate placing a disc and check for a win without
+   * actually modifying the board permanently.
+   * @param {string} color - The color to simulate placing.
+   * @param {number} col - The column to simulate placing in.
+   * @returns {boolean} True if the simulated move results in a win, false otherwise.
+   */
   // Helper to simulate placing a disc
   function simulateMove(color, col) {
     for (let r = rows - 1; r >= 0; r--) {
@@ -430,6 +480,11 @@ function cpu() {
 }
 
 
+/**
+ * Tracks and updates the score for the winning player.
+ * Also persists scores in local storage if in 'pvcpu' mode.
+ * @param {string} color - The color of the player who scored.
+ */
 function trackScore(color) {
   const isHuman = color === 'red';
 
@@ -445,6 +500,10 @@ function trackScore(color) {
   }
 }
 
+
+/**
+ * Updates the score display on both desktop and mobile UIs.
+ */
 // Update score ui
 function updateScoreUI() {
   scoreOne.textContent = playerOneScore;
@@ -453,12 +512,21 @@ function updateScoreUI() {
   scoreTwoMobile.textContent = playerTwoScore;
 }
 
+
+/**
+ * Resets the current session's scores to zero and updates the UI.
+ */
 function resetSessionScores() {
   playerOneScore = 0;
   playerTwoScore = 0;
   updateScoreUI();
 }
 
+
+/**
+ * Quits the current game, hides the game section, shows the landing page,
+ * resets session scores, and displays stored stats if in 'pvcpu' mode.
+ */
 function quitGame() {
   gameSection.hidden = true;
   landing.hidden = false;
@@ -466,7 +534,12 @@ function quitGame() {
   if (gameMode === 'pvcpu') displayStoredStats();
 }
 
-// Update score to store it in the local storage
+
+/**
+ * Updates the win/loss and level statistics for a given user in local storage.
+ * @param {string} username - The key for the user data in local storage (e.g., 'Human' or 'CPU').
+ * @param {boolean} didwin - True if the user won the round, false otherwise.
+ */
 function updateScore(username, didwin){
     const userData = getUserData(username) || { wins: 0, losses: 0, level: 0 };
     // playerWins++;
@@ -491,6 +564,9 @@ function updateScore(username, didwin){
     saveUserData(username, userData)
 }
 
+/**
+ * Displays the all-time win/loss and level statistics for human and CPU players.
+ */
 function displayStoredStats() {
   const human = getUserData(STORAGE_USER);
   const cpu   = getUserData(STORAGE_CPU);
@@ -502,6 +578,11 @@ function displayStoredStats() {
   `;
 }
 
+
+/**
+ * Displays a temporary modal indicating a level-up and updates the level display.
+ * @param {number} newLevel - The new level achieved.
+ */
 function showLevel(newLevel){
     const levelModal = document.createElement("div");
     levelModal.className = "modal level-up";
@@ -520,7 +601,9 @@ function showLevel(newLevel){
     }, 3000)
 }
 
-
+/**
+ * Triggers a confetti animation on the screen.
+ */
 function addConfetti(){
     confetti({
         particleCount: 150,

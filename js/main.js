@@ -1,12 +1,12 @@
 /**
- * @file helpers.js
+ * @file main.js
  * @game Connect 4
  * @author Fagoroye Peter
  * @date 2025-05-08
  *
  * @description
- * Helper game logic for the Connect 4 game. To handle sub functions used in the game
- * Board creation, scoring etc
+ * Main game script for the Connect 4 game. Handles initial setup, UI interactions,
+ * and switching between different game sections and modes.
  *
  * @dependencies
  * - helpers.js
@@ -14,13 +14,12 @@
  *
  */
 
-
 import createBoard from './utils/helpers.js';
 import { enterSound, clickSound } from './utils/audio.js';
 
 
-export const landing     = document.getElementById('landing');
-export const modeSelect  = document.getElementById('select-mode');
+export const landing     = document.getElementById('landing');
+export const modeSelect  = document.getElementById('select-mode');
 export const gameSection = document.getElementById('game');
 const bgMusic = document.getElementById("bg-music");
 const startBtn = document.getElementById("start-btn")
@@ -32,6 +31,10 @@ const playerTwo = document.getElementById("player-two")
 const smplayerTwo = document.getElementById("sm-player-two")
 
 
+/**
+ * Initializes background music settings when the window loads.
+ * Sets the music to loop, plays it, and sets its volume.
+ */
 window.onload = function (){
     if(bgMusic){
         bgMusic.loop = true;
@@ -41,13 +44,20 @@ window.onload = function (){
     }
 }
 
-
+/**
+ * Event listener for the start button.
+ * Plays an enter sound, then hides the landing page and shows the mode selection page.
+ */
 startBtn.addEventListener('click', () => {
     enterSound();
-    landing.hidden     = true;
-    modeSelect.hidden  = false;
+    landing.hidden     = true;
+    modeSelect.hidden  = false;
 });
 
+/**
+ * Event listener for the audio toggle button.
+ * Mutes/unmutes the background music and updates the button icon accordingly.
+ */
 audio.addEventListener('click', () => {
     bgMusic.muted = !bgMusic.muted;
 
@@ -59,9 +69,14 @@ audio.addEventListener('click', () => {
 });
 
 
+/**
+ * Event listener for the mode selection section.
+ * Determines the chosen game mode ('pvp' or 'pvcpu'), updates player names if necessary,
+ * hides the mode selection, shows the game section, and starts the game.
+ */
 modeSelect.addEventListener('click', e => {
-    const mode = e.target.dataset.mode;           // "pvp" or "pvcpu"
-    if (!mode) return;                            // ignore clicks outside buttons
+    const mode = e.target.dataset.mode; // "pvp" or "pvcpu"
+    if (!mode) return; // ignore clicks outside buttons
     
     clickSound();
 
@@ -72,7 +87,7 @@ modeSelect.addEventListener('click', e => {
 
     modeSelect.hidden = true;
     gameSection.hidden = false;
-  
+ 
     // Pass the chosen mode into your game setup:
     // startGame()
     startGame( mode );
@@ -80,8 +95,16 @@ modeSelect.addEventListener('click', e => {
 
 
 // Show Insruction
+/**
+ * Event listener for the "How To Play" button.
+ * Displays a modal with game instructions.
+ */
 howToPlay.addEventListener("click", displayHowToPlay);
 
+/**
+ * Creates and displays a modal containing instructions on how to play the game.
+ * Includes details for both PvP and PvCPU modes, and a closing button.
+ */
 function displayHowToPlay(){
     const existing = document.querySelector(".how-to-play");
     if (existing) {
@@ -110,7 +133,10 @@ function displayHowToPlay(){
     })
 }
 
-
+/**
+ * Initiates the game by creating the board with the specified game mode.
+ * @param {string} mode - The game mode ('pvp' or 'pvcpu').
+ */
 function startGame(mode){
     createBoard(mode);
 }
