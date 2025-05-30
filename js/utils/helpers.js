@@ -316,28 +316,87 @@ function countInDirection(r, c, dr, dc, color) {
 }
 
 
-function cpu(){
-    // Find available column to place the disc
-    const validCols = [];
-    for (let c = 0; c < cols; c++) {
-        if (board[0][c] === null) validCols.push(c);
-    }
+// function cpu(){
+//     // Find available column to place the disc
+//     const validCols = [];
+//     for (let c = 0; c < cols; c++) {
+//         if (board[0][c] === null) validCols.push(c);
+//     }
 
-    // Pick a random index of any available column
-    const randomIndex = Math.floor(Math.random() * validCols.length);
-    const availCol   = validCols[randomIndex];
-    // Fill the column
-    const {row, col} = fillHoles(availCol)
-    if(row >= 0 && calcWin(row, col)){
+//     // Pick a random index of any available column
+//     const randomIndex = Math.floor(Math.random() * validCols.length);
+//     const availCol   = validCols[randomIndex];
+//     // Fill the column
+//     const {row, col} = fillHoles(availCol)
+//     if(row >= 0 && calcWin(row, col)){
+//         gameOver = true;
+//         displayWinModal(currentColor);
+//         trackScore(currentColor);
+//         winSound();
+//         addConfetti();
+//     }else{
+//         switchPlayer();
+//     }
+// }
+
+function cpu() {
+  const validCols = [];
+  for (let c = 0; c < cols; c++) {
+    if (board[0][c] === null) validCols.push(c);
+  }
+
+  // Helper to simulate placing a disc
+  function simulateMove(color, col) {
+    for (let r = rows - 1; r >= 0; r--) {
+      if (board[r][col] === null) {
+        board[r][col] = color;
+        const isWin = calcWin(r, col);
+        board[r][col] = null; // Undo move
+        return isWin;
+      }
+    }
+    return false;
+  }
+
+  // 1. Try to win
+  for (let col of validCols) {
+    if (simulateMove("yellow", col)) {
+      const { row } = fillHoles(col);
+      if (calcWin(row, col)) {
         gameOver = true;
-        displayWinModal(currentColor);
-        trackScore(currentColor);
+        displayWinModal("yellow");
+        trackScore("yellow");
         winSound();
         addConfetti();
-    }else{
-        switchPlayer();
+      }
+      return;
     }
+  }
+
+  // 2. Try to block the human
+  for (let col of validCols) {
+    if (simulateMove("red", col)) {
+      const { row } = fillHoles(col);
+      switchPlayer(); // No win, just block and switch
+      return;
+    }
+  }
+
+  // 3. Otherwise, play randomly
+  const randomIndex = Math.floor(Math.random() * validCols.length);
+  const col = validCols[randomIndex];
+  const { row } = fillHoles(col);
+  if (calcWin(row, col)) {
+    gameOver = true;
+    displayWinModal("yellow");
+    trackScore("yellow");
+    winSound();
+    addConfetti();
+  } else {
+    switchPlayer();
+  }
 }
+
 
 function trackScore(color) {
   const isHuman = color === 'red';
