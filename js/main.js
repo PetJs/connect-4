@@ -110,6 +110,7 @@ function displayHowToPlay(){
     })
 }
 
+
 function startGame(mode){
     createBoard(mode);
 }

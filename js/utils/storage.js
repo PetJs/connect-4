@@ -2,7 +2,7 @@
 
 export function getUserData(username) {
     const data = JSON.parse(localStorage.getItem("connect4_users")) || {};
-    return data[username] || { wins: 0, losses: 0, level: 1 };
+    return data[username] || { wins: 0, losses: 0, level: 0 };
 }
 
 export function saveUserData(username, userData) {

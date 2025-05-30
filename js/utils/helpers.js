@@ -47,6 +47,19 @@ let gameMode = 'pvp'
 // Game over variable
 let gameOver = false;
 
+// Level
+let playerWins = 0;
+
+function initializeGameStats() {
+    const humanData = getUserData(STORAGE_USER); // Get human data
+    const currentLevel = humanData && humanData.level !== undefined ? humanData.level : 0; // Get level, default to 0
+    const levelDsiplay = document.getElementById("level-display");
+    if(levelDsiplay){
+        levelDsiplay.innerText = `Level ${currentLevel}`;
+    } 
+}
+initializeGameStats()
+
 
 function createBoard(mode) {
     gameOver = false;
@@ -364,7 +377,8 @@ function quitGame() {
 
 // Update score to store it in the local storage
 function updateScore(username, didwin){
-    const userData = getUserData(username);
+    const userData = getUserData(username) || { wins: 0, losses: 0, level: 0 };
+    // playerWins++;
 
     if(didwin){
         userData.wins += 1
@@ -373,8 +387,16 @@ function updateScore(username, didwin){
     }
 
     // Levelling
-    userData.level = Math.floor(userData.wins / 3) + 1;
+    if (username === STORAGE_USER) { 
+        const prevLevel = userData.level;
+        const newLevel = Math.floor(userData.wins / 3) ;
+        userData.level = newLevel;
 
+        if (newLevel > prevLevel) {
+            showLevel(newLevel);
+            addConfetti();
+        }
+    }
     saveUserData(username, userData)
 }
 
@@ -387,6 +409,24 @@ function displayStoredStats() {
     <p>You: ${human.wins} W / ${human.losses} L (Lvl ${human.level})</p>
     <p>CPU: ${cpu.wins} W / ${cpu.losses} L (Lvl ${cpu.level})</p>
   `;
+}
+
+function showLevel(newLevel){
+    const levelModal = document.createElement("div");
+    levelModal.className = "modal level-up";
+    levelModal.innerHTML = 
+    `
+        <h2>🎉 Level Up</h2>
+        <p>You've reached Level ${newLevel}</p>
+    `
+    document.body.appendChild(levelModal);
+    const levelDsiplay = document.getElementById("level-display");
+    if(levelDsiplay){
+        levelDsiplay.innerText = `Level ${newLevel}`; // Update the main display
+    }
+    setTimeout(()=>{
+        levelModal.remove();
+    }, 3000)
 }
 
 
