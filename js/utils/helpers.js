@@ -31,6 +31,7 @@ const boardContainer = document.getElementById("board");
 const scoreOne = document.getElementById("scoreone")
 const scoreTwo = document.getElementById("scoretwo")
 
+
 // for moile
 const scoreOneMobile = document.getElementById("sm-scoreone")
 const scoreTwoMobile = document.getElementById("sm-scoretwo")
