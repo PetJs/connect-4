@@ -93,10 +93,10 @@ function displayHowToPlay(){
     `
         <h2 class="text-head">How To Play</h2>
         <ul class="text-list">
-            <li>For PVP, it is played by two peaople suing a shared computer, each player takes turn to add a disc.</li>
-            <li>A winner is gotten, when either of the player stack their disc 4 in a row. Either horizontally, vertically or diagonally</li>
-            <li>For PvCPU, You are playing against the computer, in this there is a levelling system</li>
-            <li>At the beginning, you start in level zero, and your level keeps increasing each time you win against the computer 5 times. </li>
+            <li><img src="/assets/images/pin.png" alt="pin" width="16px" height="16px"> For PVP, it is played by two peaople suing a shared computer, each player takes turn to add a disc.</li>
+            <li><img src="/assets/images/pin.png" alt="pin" width="16px" height="16px"> A winner is gotten, when either of the player stack their disc 4 in a row. Either horizontally, vertically or diagonally</li>
+            <li><img src="/assets/images/pin.png" alt="pin" width="16px" height="16px"> For PvCPU, You are playing against the computer, in this there is a levelling system</li>
+            <li><img src="/assets/images/pin.png" alt="pin" width="16px" height="16px"> At the beginning, you start in level zero, and your level keeps increasing each time you win against the computer 5 times. </li>
         </ul>
         <button id="close" class="close">X</button>
     `

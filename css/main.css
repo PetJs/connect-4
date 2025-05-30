@@ -268,7 +268,7 @@ main {
     align-items: center;
     position: relative;
     width: 80vw;
-    background-color: white;
+    background-color: rgb(102, 140, 245);
     padding: 6px;
     border-radius: 12px;
 }
@@ -278,6 +278,7 @@ main {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    color: white;
 }
 
 .close{
@@ -339,23 +340,51 @@ main {
     font-family: 'LogoFont', sans-serif;
 }
 
-.level-up {
-  position: fixed;
-  top: 30%;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #ffdf6b;
-  padding: 20px 30px;
-  border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
-  text-align: center;
-  z-index: 1000;
-  animation: popIn 0.3s ease;
+.level-display{
+    display: flex;
+    position: relative;
+    /* background-color: red; */
+    font-family: "LogoFont";
+    margin-left: 3em;
+    margin-bottom: 24px;
 }
 
-@keyframes popIn {
-  from { transform: translateX(-50%) scale(0.8); opacity: 0; }
-  to { transform: translateX(-50%) scale(1); opacity: 1; }
+.modal.level-up {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgb(248, 243, 178);
+  padding: 20px 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  z-index: 1000;
+  animation: fadeInScale 0.4s ease-out forwards;
+  text-align: center;
+  font-family: sans-serif;
+}
+
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+.badge {
+  display: inline-block;
+  background: linear-gradient(to right, #4c6baf, #c2c781);
+  color: white;
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+  font-family: "LogoFont";
 }
 
 @keyframes fade-in {

@@ -14,7 +14,7 @@
  *
  */
 
-import { clickSound } from "./audio.js";
+import { clickSound, loseSound } from "./audio.js";
 import { winSound } from "./audio.js";
 import { landing, gameSection, modeSelect } from "../main.js";
 import { getUserData, saveUserData } from "./storage.js";
@@ -55,7 +55,7 @@ function initializeGameStats() {
     const currentLevel = humanData && humanData.level !== undefined ? humanData.level : 0; // Get level, default to 0
     const levelDsiplay = document.getElementById("level-display");
     if(levelDsiplay){
-        levelDsiplay.innerText = `Level ${currentLevel}`;
+        levelDsiplay.innerHTML = `<span class="badge">Level ${currentLevel}</span>`;
     } 
 }
 initializeGameStats()
@@ -246,6 +246,39 @@ function displayTieModal() {
   showModal("It's a tie!");
 }
 
+function displayLoseModal(){
+    const existingModal = document.querySelector(".modal");
+    if (existingModal) {
+        existingModal.remove();
+    }
+
+    const modal = document.createElement("div");
+    modal.className = "modal"
+    modal.innerHTML = 
+    `
+        <h2>You Lose</h2>
+        <div class= "modal-btn-container">
+            <button class= "btn-quit" id="btn-quit">Quit!</button>
+            <button class= "btn-try-again" id="btn-try-again">Play Again</button>
+        </div>
+    `
+
+    document.body.appendChild(modal);
+
+    const btnQuit = document.getElementById("btn-quit");
+    const btnTryAgain = document.getElementById("btn-try-again");
+
+    btnQuit.addEventListener("click", ()=> {
+        quitGame()
+        modal.remove()
+    })
+
+    btnTryAgain.addEventListener('click', ()=>{
+        createBoard();
+        modal.remove()
+    })
+}
+
 function isBoardFull() {
   return board[0].every(cell => cell !== null);
 }
@@ -364,10 +397,9 @@ function cpu() {
       const { row } = fillHoles(col);
       if (calcWin(row, col)) {
         gameOver = true;
-        displayWinModal("yellow");
+        displayLoseModal()
         trackScore("yellow");
-        winSound();
-        addConfetti();
+        loseSound();
       }
       return;
     }
@@ -476,12 +508,12 @@ function showLevel(newLevel){
     levelModal.innerHTML = 
     `
         <h2>🎉 Level Up</h2>
-        <p>You've reached Level ${newLevel}</p>
+        <div class="badge">Level ${newLevel}</div>
     `
     document.body.appendChild(levelModal);
     const levelDsiplay = document.getElementById("level-display");
     if(levelDsiplay){
-        levelDsiplay.innerText = `Level ${newLevel}`; // Update the main display
+        levelDsiplay.innerHTML = `<span class="badge">Level ${newLevel}</span>`; // Update the main display
     }
     setTimeout(()=>{
         levelModal.remove();
